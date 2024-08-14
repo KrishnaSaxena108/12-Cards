@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.3s ease;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card:hover {
+            color: blue;
+            border: 2px solid black;
+        }
+        .card span.hidden {
+            display: none;
+        }
+
+        .card span {
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card-container" id="card-container">
+    </div>
+    <script>
+        let flippedCards = [];
+        let clickDisabled = false;
+        function initializeCards() {
+            const container = document.getElementById('card-container');
+            for (let i = 1; i <= 12; i++) {
+                const card = createCard(`Hi!!! I am Card ${i}`);
+                container.appendChild(card);
+            }
+        }
+        function createCard(details) {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.innerHTML = `<span class="hidden">${details}</span>`;
+            card.addEventListener('click', () => flipCard(card));
+            return card;
+        }
+        function flipCard(card) {
+            if (clickDisabled || flippedCards.includes(card)) return;
+
+            card.firstChild.classList.remove('hidden');
+            flippedCards.push(card);
+
+            if (flippedCards.length === 1) {
+                clickDisabled = true;
+                setTimeout(() => {
+                    const [card1] = flippedCards;
+                    card1.firstChild.classList.add('hidden');
+                    flippedCards = [];
+                    clickDisabled = false;
+                }, 1000);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', initializeCards);
+    </script>
+</body>
+
+</html>
